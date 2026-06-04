@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0d0d1a"/>
+    </linearGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#8a7b6b"/>
+      <stop offset="40%" stop-color="#6b5b4f"/>
+      <stop offset="100%" stop-color="#4a3d34"/>
+    </linearGradient>
+    <linearGradient id="handle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c4b8d0"/>
+      <stop offset="50%" stop-color="#d5cce0"/>
+      <stop offset="100%" stop-color="#a89bb5"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7a6b5e"/>
+      <stop offset="100%" stop-color="#5a4c42"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Bar chart (background) -->
+  <rect x="55" y="320" width="62" height="130" rx="8" fill="#546e7a"/>
+  <rect x="135" y="270" width="62" height="180" rx="8" fill="#29b6f6"/>
+  <rect x="215" y="230" width="62" height="220" rx="8" fill="#66bb6a"/>
+  <rect x="295" y="195" width="62" height="255" rx="8" fill="#ffa726"/>
+  <rect x="375" y="155" width="62" height="295" rx="8" fill="#ef5350"/>
+
+  <!-- Base shelf -->
+  <rect x="40" y="448" width="432" height="14" rx="7" fill="#e0e0e0" opacity="0.25"/>
+
+  <!-- Plumb bob (chumbada) - large, overlapping bars -->
+  <!-- Cone body -->
+  <ellipse cx="256" cy="220" rx="150" ry="55" fill="url(#ring)" opacity="0.9"/>
+  <path d="M106 220 C106 220 140 225 256 225 C372 225 406 220 406 220 L256 380 Z" fill="url(#cone)"/>
+  <!-- Cone highlight reflection -->
+  <path d="M150 265 Q155 280 165 300" stroke="rgba(255,255,255,0.25)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M155 310 Q158 318 162 325" stroke="rgba(255,255,255,0.2)" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+  <!-- Top rings -->
+  <ellipse cx="256" cy="195" rx="80" ry="28" fill="#5a4c42"/>
+  <ellipse cx="256" cy="185" rx="80" ry="28" fill="url(#ring)"/>
+  <ellipse cx="256" cy="170" rx="55" ry="20" fill="#5a4c42"/>
+  <ellipse cx="256" cy="162" rx="55" ry="20" fill="url(#ring)"/>
+  <ellipse cx="256" cy="150" rx="35" ry="14" fill="#5a4c42"/>
+  <ellipse cx="256" cy="144" rx="35" ry="14" fill="url(#ring)"/>
+
+  <!-- Handle (cylinder) -->
+  <rect x="243" y="60" width="26" height="90" rx="13" fill="url(#handle)"/>
+  <ellipse cx="256" cy="60" rx="13" ry="5" fill="#d5cce0"/>
+
+  <!-- Trend lines (over prumo) -->
+  <line x1="86" y1="305" x2="166" y2="260" stroke="rgba(255,255,255,0.6)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="166" y1="260" x2="246" y2="225" stroke="rgba(255,255,255,0.6)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="246" y1="225" x2="326" y2="190" stroke="rgba(255,255,255,0.6)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="326" y1="190" x2="406" y2="150" stroke="rgba(255,255,255,0.6)" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Trend dots -->
+  <circle cx="86" cy="305" r="10" fill="#546e7a" stroke="white" stroke-width="2"/>
+  <circle cx="166" cy="260" r="10" fill="#29b6f6" stroke="white" stroke-width="2"/>
+  <circle cx="246" cy="225" r="10" fill="#66bb6a" stroke="white" stroke-width="2"/>
+  <circle cx="326" cy="190" r="10" fill="#ffa726" stroke="white" stroke-width="2"/>
+  <circle cx="406" cy="150" r="10" fill="#ef5350" stroke="white" stroke-width="2"/>
+</svg>
