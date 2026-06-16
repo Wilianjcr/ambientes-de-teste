@@ -46,6 +46,9 @@
         }
     </script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
 
@@ -91,6 +94,11 @@
                     firebase.initializeApp(firebaseConfig);
                 }
                 db = firebase.firestore();
+                if (firebase.auth) {
+                    firebase.auth().signInAnonymously()
+                        .then(function(){ console.log('[Prumo] Auth anônima OK ✓'); })
+                        .catch(function(e){ console.warn('[Prumo] Auth anônima falhou:', e.message); });
+                }
                 console.log('[Prumo] Firebase inicializado ✓');
             } catch(e) {
                 console.warn('[Prumo] Falha ao inicializar Firebase:', e.message);
@@ -105,8 +113,18 @@
                 var s2 = document.createElement('script');
                 s2.src = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js';
                 s2.onload = function () {
-                    initFirebase();
-                    if (typeof callback === 'function') callback();
+                    var s3 = document.createElement('script');
+                    s3.src = 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js';
+                    s3.onload = function () {
+                        initFirebase();
+                        if (typeof callback === 'function') callback();
+                    };
+                    s3.onerror = function () {
+                        console.warn('[Prumo] firebase-auth-compat.js não carregou.');
+                        initFirebase();
+                        if (typeof callback === 'function') callback();
+                    };
+                    document.head.appendChild(s3);
                 };
                 s2.onerror = function () {
                     console.warn('[Prumo] firebase-firestore-compat.js não carregou.');
@@ -253,6 +271,12 @@
             -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
             border-bottom-color: rgba(255,255,255,0.1) !important;
         }
+        html[data-theme="liquid-glass"] #desktop-sidebar {
+            background: rgba(10,10,10,0.85) !important;
+            backdrop-filter: blur(40px) saturate(1.8) !important;
+            -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
+            border-color: rgba(255,255,255,0.08) !important;
+        }
         html[data-theme="liquid-glass"] #user-sidebar {
             background: rgba(10,10,10,0.92) !important;
             backdrop-filter: blur(40px) saturate(1.8) !important;
@@ -378,35 +402,71 @@
             border: 1px solid rgba(255,255,255,0.1) !important;
         }
 
-        /* ── Theme overrides (Solarized) via CSS vars ── */
-        html[data-theme="solarized-dark"] body,
-        html[data-theme="solarized-light"] body { background-color: var(--bg-body); color: var(--text-primary); }
+        /* ── Universal theme overrides via CSS vars (replaces per-theme duplicates) ── */
+        html[data-theme="solarized-dark"] body, html[data-theme="solarized-light"] body,
+        html[data-theme="rosa"] body, html[data-theme="roxo"] body, html[data-theme="marrom"] body { background-color: var(--bg-body); color: var(--text-primary); }
 
-        html[data-theme="solarized-dark"] .bg-white,
-        html[data-theme="solarized-dark"] .dark\:bg-gray-800 { background-color: var(--bg-card) !important; }
-        html[data-theme="solarized-dark"] .bg-gray-50,
-        html[data-theme="solarized-dark"] .dark\:bg-gray-900 { background-color: var(--bg-card-alt) !important; }
-        html[data-theme="solarized-dark"] .border-gray-200,
-        html[data-theme="solarized-dark"] .dark\:border-gray-700,
-        html[data-theme="solarized-dark"] .border-gray-100,
-        html[data-theme="solarized-dark"] .dark\:border-gray-600 { border-color: var(--border-color) !important; }
-        html[data-theme="solarized-dark"] .text-gray-900,
-        html[data-theme="solarized-dark"] .dark\:text-white { color: var(--text-primary) !important; }
-        html[data-theme="solarized-dark"] .text-gray-500,
-        html[data-theme="solarized-dark"] .dark\:text-gray-400,
-        html[data-theme="solarized-dark"] .text-gray-400 { color: var(--text-secondary) !important; }
-        html[data-theme="solarized-dark"] .glass-panel { background: var(--bg-glass) !important; }
-        html[data-theme="solarized-dark"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
+        html[data-theme="solarized-dark"] .bg-white, html[data-theme="solarized-dark"] .dark\:bg-gray-800,
+        html[data-theme="solarized-light"] .bg-white,
+        html[data-theme="rosa"] .bg-white,
+        html[data-theme="roxo"] .bg-white, html[data-theme="roxo"] .dark\:bg-gray-800,
+        html[data-theme="marrom"] .bg-white, html[data-theme="marrom"] .dark\:bg-gray-800 { background-color: var(--bg-card) !important; }
 
-        html[data-theme="solarized-light"] .bg-white { background-color: var(--bg-card) !important; }
-        html[data-theme="solarized-light"] .bg-gray-50 { background-color: var(--bg-card-alt) !important; }
-        html[data-theme="solarized-light"] .border-gray-200,
-        html[data-theme="solarized-light"] .border-gray-100 { border-color: var(--border-color) !important; }
-        html[data-theme="solarized-light"] .text-gray-900 { color: var(--text-primary) !important; }
-        html[data-theme="solarized-light"] .text-gray-500,
-        html[data-theme="solarized-light"] .text-gray-400 { color: var(--text-secondary) !important; }
-        html[data-theme="solarized-light"] .glass-panel { background: var(--bg-glass) !important; }
-        html[data-theme="solarized-light"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
+        html[data-theme="solarized-dark"] .bg-gray-50, html[data-theme="solarized-dark"] .dark\:bg-gray-900,
+        html[data-theme="solarized-light"] .bg-gray-50,
+        html[data-theme="rosa"] .bg-gray-50,
+        html[data-theme="roxo"] .bg-gray-50, html[data-theme="roxo"] .dark\:bg-gray-900,
+        html[data-theme="marrom"] .bg-gray-50, html[data-theme="marrom"] .dark\:bg-gray-900 { background-color: var(--bg-card-alt) !important; }
+
+        html[data-theme="solarized-dark"] .border-gray-200, html[data-theme="solarized-dark"] .dark\:border-gray-700,
+        html[data-theme="solarized-dark"] .border-gray-100, html[data-theme="solarized-dark"] .dark\:border-gray-600,
+        html[data-theme="solarized-light"] .border-gray-200, html[data-theme="solarized-light"] .border-gray-100,
+        html[data-theme="rosa"] .border-gray-200, html[data-theme="rosa"] .border-gray-100,
+        html[data-theme="roxo"] .border-gray-200, html[data-theme="roxo"] .dark\:border-gray-700,
+        html[data-theme="roxo"] .border-gray-100, html[data-theme="roxo"] .dark\:border-gray-600,
+        html[data-theme="marrom"] .border-gray-200, html[data-theme="marrom"] .dark\:border-gray-700,
+        html[data-theme="marrom"] .border-gray-100, html[data-theme="marrom"] .dark\:border-gray-600 { border-color: var(--border-color) !important; }
+
+        html[data-theme="solarized-dark"] .text-gray-900, html[data-theme="solarized-dark"] .dark\:text-white,
+        html[data-theme="solarized-light"] .text-gray-900,
+        html[data-theme="rosa"] .text-gray-900,
+        html[data-theme="roxo"] .text-gray-900, html[data-theme="roxo"] .dark\:text-white,
+        html[data-theme="marrom"] .text-gray-900, html[data-theme="marrom"] .dark\:text-white { color: var(--text-primary) !important; }
+
+        html[data-theme="solarized-dark"] .text-gray-500, html[data-theme="solarized-dark"] .dark\:text-gray-400, html[data-theme="solarized-dark"] .text-gray-400,
+        html[data-theme="solarized-light"] .text-gray-500, html[data-theme="solarized-light"] .text-gray-400,
+        html[data-theme="rosa"] .text-gray-500, html[data-theme="rosa"] .text-gray-400,
+        html[data-theme="roxo"] .text-gray-500, html[data-theme="roxo"] .dark\:text-gray-400, html[data-theme="roxo"] .text-gray-400,
+        html[data-theme="marrom"] .text-gray-500, html[data-theme="marrom"] .dark\:text-gray-400, html[data-theme="marrom"] .text-gray-400 { color: var(--text-secondary) !important; }
+
+        html[data-theme="solarized-dark"] .glass-panel, html[data-theme="solarized-light"] .glass-panel,
+        html[data-theme="rosa"] .glass-panel, html[data-theme="roxo"] .glass-panel,
+        html[data-theme="marrom"] .glass-panel { background: var(--bg-glass) !important; }
+
+        html[data-theme="solarized-dark"] ::-webkit-scrollbar-thumb, html[data-theme="solarized-light"] ::-webkit-scrollbar-thumb,
+        html[data-theme="rosa"] ::-webkit-scrollbar-thumb, html[data-theme="roxo"] ::-webkit-scrollbar-thumb,
+        html[data-theme="marrom"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
+
+        /* Shared: app-container, sidebar, header, login modal */
+        html[data-theme="solarized-dark"] #app-container, html[data-theme="solarized-light"] #app-container,
+        html[data-theme="rosa"] #app-container, html[data-theme="roxo"] #app-container,
+        html[data-theme="marrom"] #app-container { background-color: var(--bg-body) !important; }
+
+        html[data-theme="solarized-dark"] #user-sidebar, html[data-theme="solarized-light"] #user-sidebar,
+        html[data-theme="rosa"] #user-sidebar, html[data-theme="roxo"] #user-sidebar,
+        html[data-theme="marrom"] #user-sidebar,
+        html[data-theme="solarized-dark"] #desktop-sidebar, html[data-theme="solarized-light"] #desktop-sidebar,
+        html[data-theme="rosa"] #desktop-sidebar, html[data-theme="roxo"] #desktop-sidebar,
+        html[data-theme="marrom"] #desktop-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
+
+        html[data-theme="solarized-dark"] header, html[data-theme="solarized-light"] header,
+        html[data-theme="rosa"] header, html[data-theme="roxo"] header,
+        html[data-theme="marrom"] header { border-color: var(--border-color) !important; }
+
+        html[data-theme="solarized-dark"] #modal-login > div, html[data-theme="solarized-light"] #modal-login > div,
+        html[data-theme="rosa"] #modal-login > div, html[data-theme="roxo"] #modal-login > div,
+        html[data-theme="marrom"] #modal-login > div { background-color: var(--bg-card) !important; }
+
         html[data-theme="solarized-light"] .bg-gray-900.dark\:bg-white,
         html[data-theme="solarized-light"] footer .bg-gray-900 { background-color: #073642 !important; }
 
@@ -532,6 +592,16 @@
         }
         #save-indicator.visible { opacity: 1; transform: translateY(0); }
 
+        /* Offline indicator */
+        #offline-indicator {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: linear-gradient(90deg, #ef4444, #f97316);
+            color: white; font-size: 11px; font-weight: 700; text-align: center;
+            padding: 4px 0; z-index: 300; transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        #offline-indicator.visible { transform: translateY(0); }
+
         /* Cloud sync indicator */
         #cloud-indicator {
             position: fixed; bottom: 84px; left: 20px; background: rgba(59,130,246,0.92);
@@ -596,6 +666,9 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
             position: relative;
         }
+        @media (min-width: 1024px) {
+            .submenu-card { aspect-ratio: auto !important; min-height: 140px; }
+        }
         #drag-hint { display: none; }
 
         .glass-panel {
@@ -612,61 +685,9 @@
         .theme-option.active-theme { border-color: var(--accent, #3b82f6) !important; box-shadow: 0 0 0 3px var(--accent-soft, rgba(59,130,246,0.2)); }
         .theme-option:hover:not(.active-theme) { border-color: var(--text-muted, #9ca3af); }
 
-        /* Solarized body overrides for smooth app container */
-        html[data-theme="solarized-dark"] #app-container { background-color: var(--bg-body) !important; }
-        html[data-theme="solarized-light"] #app-container { background-color: var(--bg-body) !important; }
-        html[data-theme="solarized-dark"] #user-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
-        html[data-theme="solarized-light"] #user-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
-        html[data-theme="solarized-dark"] header { border-color: var(--border-color) !important; }
-        html[data-theme="solarized-light"] header { border-color: var(--border-color) !important; }
-        html[data-theme="solarized-dark"] #modal-login > div { background-color: var(--bg-card) !important; }
-        html[data-theme="solarized-light"] #modal-login > div { background-color: var(--bg-card) !important; }
+        /* Solarized body overrides: consolidated above in universal block */
 
-        /* ── Rosa theme overrides ── */
-        html[data-theme="rosa"] body { background-color: var(--bg-body); color: var(--text-primary); }
-        html[data-theme="rosa"] #app-container { background-color: var(--bg-body) !important; }
-        html[data-theme="rosa"] .bg-white { background-color: var(--bg-card) !important; }
-        html[data-theme="rosa"] .bg-gray-50 { background-color: var(--bg-card-alt) !important; }
-        html[data-theme="rosa"] .border-gray-200, html[data-theme="rosa"] .border-gray-100 { border-color: var(--border-color) !important; }
-        html[data-theme="rosa"] .text-gray-900 { color: var(--text-primary) !important; }
-        html[data-theme="rosa"] .text-gray-500, html[data-theme="rosa"] .text-gray-400 { color: var(--text-secondary) !important; }
-        html[data-theme="rosa"] .glass-panel { background: var(--bg-glass) !important; }
-        html[data-theme="rosa"] #user-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
-        html[data-theme="rosa"] header { border-color: var(--border-color) !important; }
-        html[data-theme="rosa"] #modal-login > div { background-color: var(--bg-card) !important; }
-        html[data-theme="rosa"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
-
-        /* ── Roxo theme overrides ── */
-        html[data-theme="roxo"] body { background-color: var(--bg-body); color: var(--text-primary); }
-        html[data-theme="roxo"] #app-container { background-color: var(--bg-body) !important; }
-        html[data-theme="roxo"] .bg-white, html[data-theme="roxo"] .dark\:bg-gray-800 { background-color: var(--bg-card) !important; }
-        html[data-theme="roxo"] .bg-gray-50, html[data-theme="roxo"] .dark\:bg-gray-900 { background-color: var(--bg-card-alt) !important; }
-        html[data-theme="roxo"] .border-gray-200, html[data-theme="roxo"] .dark\:border-gray-700,
-        html[data-theme="roxo"] .border-gray-100, html[data-theme="roxo"] .dark\:border-gray-600 { border-color: var(--border-color) !important; }
-        html[data-theme="roxo"] .text-gray-900, html[data-theme="roxo"] .dark\:text-white { color: var(--text-primary) !important; }
-        html[data-theme="roxo"] .text-gray-500, html[data-theme="roxo"] .dark\:text-gray-400,
-        html[data-theme="roxo"] .text-gray-400 { color: var(--text-secondary) !important; }
-        html[data-theme="roxo"] .glass-panel { background: var(--bg-glass) !important; }
-        html[data-theme="roxo"] #user-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
-        html[data-theme="roxo"] header { border-color: var(--border-color) !important; }
-        html[data-theme="roxo"] #modal-login > div { background-color: var(--bg-card) !important; }
-        html[data-theme="roxo"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
-
-        /* ── Marrom theme overrides ── */
-        html[data-theme="marrom"] body { background-color: var(--bg-body); color: var(--text-primary); }
-        html[data-theme="marrom"] #app-container { background-color: var(--bg-body) !important; }
-        html[data-theme="marrom"] .bg-white, html[data-theme="marrom"] .dark\:bg-gray-800 { background-color: var(--bg-card) !important; }
-        html[data-theme="marrom"] .bg-gray-50, html[data-theme="marrom"] .dark\:bg-gray-900 { background-color: var(--bg-card-alt) !important; }
-        html[data-theme="marrom"] .border-gray-200, html[data-theme="marrom"] .dark\:border-gray-700,
-        html[data-theme="marrom"] .border-gray-100, html[data-theme="marrom"] .dark\:border-gray-600 { border-color: var(--border-color) !important; }
-        html[data-theme="marrom"] .text-gray-900, html[data-theme="marrom"] .dark\:text-white { color: var(--text-primary) !important; }
-        html[data-theme="marrom"] .text-gray-500, html[data-theme="marrom"] .dark\:text-gray-400,
-        html[data-theme="marrom"] .text-gray-400 { color: var(--text-secondary) !important; }
-        html[data-theme="marrom"] .glass-panel { background: var(--bg-glass) !important; }
-        html[data-theme="marrom"] #user-sidebar { background-color: var(--bg-sidebar) !important; border-color: var(--border-color) !important; }
-        html[data-theme="marrom"] header { border-color: var(--border-color) !important; }
-        html[data-theme="marrom"] #modal-login > div { background-color: var(--bg-card) !important; }
-        html[data-theme="marrom"] ::-webkit-scrollbar-thumb { background: var(--scrollbar) !important; }
+        /* Rosa, Roxo, Marrom theme overrides: consolidated above in universal block */
 
         /* ── Favorites system ── */
         .fav-star {
@@ -698,6 +719,30 @@
         }
         #favorites-strip .fav-icon-btn:active { transform: scale(0.92); }
         #favorites-strip .fav-icon-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        /* ── Desktop Layout: Fixed Sidebar + Main Content ── */
+        @media (min-width: 1024px) {
+            #desktop-sidebar {
+                display: flex !important;
+                flex-direction: column;
+                width: 260px;
+                min-width: 260px;
+                height: 100%;
+                border-right: 1px solid var(--border-color, #e5e7eb);
+                background: var(--bg-card, #ffffff);
+            }
+            #desktop-main-wrap {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                min-width: 0;
+            }
+            #sidebar-overlay { display: none !important; }
+        }
+        @media (max-width: 1023px) {
+            #desktop-sidebar { display: none !important; }
+        }
         #favorites-divider { display: none; }
         /* Drag state for cards */
         .submenu-card.card-dragging {
@@ -738,13 +783,14 @@
 
     <datalist id="clientesList"></datalist>
     <div id="drag-hint" class="hidden"></div>
-    <div id="save-indicator" class="flex items-center gap-1.5"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Salvo</div>
-    <div id="cloud-indicator" class="flex items-center gap-1.5"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Sincronizado</div>
+    <div id="offline-indicator" role="status" aria-live="polite">⚡ Modo Offline — dados salvos localmente</div>
+    <div id="save-indicator" role="status" aria-live="polite" class="flex items-center gap-1.5"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Salvo</div>
+    <div id="cloud-indicator" role="status" aria-live="polite" class="flex items-center gap-1.5"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Sincronizado</div>
 
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black/50 z-[90] backdrop-blur-sm opacity-0 transition-opacity duration-300 print-hide"></div>
 
     <!-- MODAL: Seletor de Tema -->
-    <div id="modal-theme" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[200] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4" onclick="if(event.target===this) fecharSeletorTema()">
+    <div id="modal-theme" role="dialog" aria-modal="true" aria-label="Selecionar Tema" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[200] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4" onclick="if(event.target===this) fecharSeletorTema()">
         <div id="modal-theme-content" class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md p-6 transform translate-y-4 transition-all duration-300" style="background-color: var(--bg-card, '')">
             <div class="text-center mb-6">
                 <h2 class="text-lg font-black uppercase tracking-widest heading-font" style="color: var(--text-primary, '')">Selecionar Tema</h2>
@@ -852,9 +898,49 @@
         </div>
     </div>
 
-    <div id="app-container" class="w-full h-full bg-gray-50 dark:bg-gray-900 shadow-2xl overflow-hidden relative flex flex-col transition-all duration-300 max-w-[1920px] mx-auto">
+    <div id="app-container" class="w-full h-full bg-gray-50 dark:bg-gray-900 shadow-2xl overflow-hidden relative flex flex-col lg:flex-row transition-all duration-300 max-w-[1920px] mx-auto">
 
-        <!-- SIDEBAR -->
+        <!-- DESKTOP SIDEBAR (visible only on lg+) -->
+        <aside id="desktop-sidebar" class="hidden" style="display:none">
+            <div class="p-5 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3">
+                <svg class="w-7 h-7" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="55" y="320" width="62" height="130" rx="8" fill="#546e7a"/><rect x="135" y="270" width="62" height="180" rx="8" fill="#29b6f6"/><rect x="215" y="230" width="62" height="220" rx="8" fill="#66bb6a"/><rect x="295" y="195" width="62" height="255" rx="8" fill="#ffa726"/><rect x="375" y="155" width="62" height="295" rx="8" fill="#ef5350"/>
+                    <ellipse class="prumo-body" cx="256" cy="220" rx="150" ry="55" fill="#6b5b4f" opacity="0.9"/>
+                    <path class="prumo-cone" d="M106 220 C106 220 140 225 256 225 C372 225 406 220 406 220 L256 380 Z" fill="#7a6b5e"/>
+                </svg>
+                <div>
+                    <h1 class="text-sm font-black uppercase tracking-[0.15em] text-gray-900 dark:text-white heading-font">PRUMO</h1>
+                    <p class="text-[10px] text-gray-400 font-medium">Gestão Operacional</p>
+                </div>
+            </div>
+            <div id="desktop-sidebar-user" class="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Operador</p>
+                <p id="desktop-user-name" class="text-sm font-bold text-gray-900 dark:text-white truncate"></p>
+                <p id="desktop-user-sector" class="text-[11px] text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5"></p>
+            </div>
+            <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+                <button onclick="abrirSeletorTema()" class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl flex items-center gap-3 transition-colors">
+                    <span class="w-7 h-7 rounded-lg bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-sm">🎨</span>
+                    Tema
+                </button>
+                <button id="btn-install-desktop" onclick="installPWA()" class="hidden w-full text-left px-4 py-3 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-xl items-center gap-3 transition-colors">
+                    <span class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-sm">📱</span>
+                    Instalar App
+                </button>
+            </nav>
+            <div class="p-3 border-t border-gray-100 dark:border-gray-700">
+                <button onclick="logout()" class="w-full text-left px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl flex items-center gap-3 transition-colors">
+                    <span class="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-sm">🚪</span>
+                    Sair
+                </button>
+                <p class="text-[9px] text-gray-400 font-medium uppercase tracking-widest text-center mt-2">Prumo OS v1.1 — Cloud</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT WRAP -->
+        <div id="desktop-main-wrap" class="flex-1 flex flex-col overflow-hidden min-w-0">
+
+        <!-- MOBILE SIDEBAR (overlay) -->
         <div id="user-sidebar" class="fixed top-0 right-0 h-full w-[85%] max-w-[320px] bg-white dark:bg-gray-800 shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 cubic-bezier(0.4, 0, 0.2, 1) flex flex-col border-l border-gray-100 dark:border-gray-700 print-hide">
             <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
                 <span class="font-black text-xs uppercase tracking-widest text-gray-500 dark:text-gray-400 heading-font">Menu de Opções</span>
@@ -887,7 +973,7 @@
         <header class="glass-panel border-b border-gray-200 dark:border-gray-800 shadow-sm z-20 sticky top-0 shrink-0 print-hide">
             <div class="px-5 py-3 md:py-4 flex items-center justify-between">
                 <div class="w-10 flex items-center justify-start">
-                    <button id="btn-voltar" onclick="goBack()" class="hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 active:scale-95 rounded-full transition-all">
+                    <button id="btn-voltar" onclick="goBack()" aria-label="Voltar" class="hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 active:scale-95 rounded-full transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     </button>
                 </div>
@@ -916,7 +1002,7 @@
                 <div class="w-10 flex items-center justify-end relative">
                     <span id="header-bags-badge" class="hidden absolute right-12 top-1/2 -translate-y-1/2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm whitespace-nowrap">0 SC</span>
 
-                    <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 -mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 active:scale-95 transition-all flex flex-col gap-1 items-center justify-center w-10 h-10">
+                    <button onclick="toggleSidebar()" aria-label="Abrir menu" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 -mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 active:scale-95 transition-all flex flex-col gap-1 items-center justify-center w-10 h-10 lg:hidden">
                         <span class="w-5 h-0.5 bg-current rounded-full"></span>
                         <span class="w-5 h-0.5 bg-current rounded-full"></span>
                         <span class="w-5 h-0.5 bg-current rounded-full"></span>
@@ -947,7 +1033,7 @@
                     <h1 id="user-name-display" class="text-2xl md:text-4xl font-black text-gray-900 dark:text-white tracking-tight heading-font hidden"></h1>
                 </div>
 
-                <div class="w-full max-w-3xl mx-auto flex flex-col pb-4">
+                <div class="w-full max-w-3xl lg:max-w-5xl mx-auto flex flex-col pb-4">
                     
                     <div id="adm-panel" class="hidden flex-col gap-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -978,7 +1064,7 @@
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Segure para reordenar</span>
                             </div>
-                            <div id="adm-setores-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                            <div id="adm-setores-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"></div>
                         </div>
 
                         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-soft">
@@ -1096,9 +1182,9 @@
             </div>
 
             <div id="view-submenu" class="view-hidden w-full h-full flex flex-col p-4 md:p-8 overflow-y-auto">
-                <div class="w-full max-w-4xl mx-auto flex flex-col pb-6">
+                <div class="w-full max-w-4xl lg:max-w-6xl mx-auto flex flex-col pb-6">
                     
-                    <div id="submenu-quick-read" class="mb-8 bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-soft hidden">
+                    <div id="submenu-quick-read" class="mb-8 bg-white dark:bg-gray-800 rounded-2xl p-6 lg:p-8 border border-gray-200 dark:border-gray-700 shadow-soft hidden">
                         <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
                             <h3 class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest heading-font">Resumo de Hoje</h3>
                             <span id="qr-date" class="text-xs font-semibold text-gray-500 bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-md"></span>
@@ -1120,7 +1206,7 @@
 
                     <div id="favorites-strip"><span class="text-[9px] font-bold uppercase tracking-widest shrink-0" style="color: var(--text-muted, #9ca3af)">⭐</span></div>
                     <div id="favorites-divider"></div>
-                    <div id="submenu-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 justify-center place-content-start">
+                    <div id="submenu-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-center place-content-start">
                         <button data-key="atividades" onclick="navigate('view-atividades',currentSector)" class="submenu-card w-full bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-soft border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center active:scale-[0.98] transition-all hover:-translate-y-1 hover:shadow-md group aspect-square text-center focus:outline-none focus:ring-2 focus:ring-blue-500 relative overflow-hidden"><div class="lp-ring"></div>
                             <div class="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-blue-50 dark:bg-blue-900/20 text-blue-500 dark:text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform mb-3 md:mb-4">
                                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
@@ -1677,6 +1763,7 @@
                 </div>
             </div>
         </footer>
+        </div><!-- /desktop-main-wrap -->
     </div>
 
     <!-- MODAL: HISTÓRICO -->
@@ -1878,7 +1965,7 @@
     </div>
 
     <!-- MODAL: LOGIN -->
-    <div id="modal-login" class="fixed inset-0 bg-[#1a1a1a]/90 backdrop-blur-xl z-[150] hidden flex flex-col justify-center items-center p-6 transition-opacity duration-500">
+    <div id="modal-login" role="dialog" aria-modal="true" aria-label="Login" class="fixed inset-0 bg-[#1a1a1a]/90 backdrop-blur-xl z-[150] hidden flex flex-col justify-center items-center p-6 transition-opacity duration-500">
         <div class="w-full max-w-sm bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 md:p-10 flex flex-col items-center border border-gray-200 dark:border-gray-700">
             <div class="w-24 h-24 mb-8 rounded-2xl shadow-inner-soft bg-gray-50 dark:bg-gray-900 flex items-center justify-center border border-gray-100 dark:border-gray-700 overflow-hidden p-2">
                 <img src="./icon.svg" alt="Prumo" class="w-full h-full object-contain">
@@ -1908,7 +1995,7 @@
     </div>
 
     <!-- MODAL: ZERAR DADOS -->
-    <div id="modal-confirm" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+    <div id="modal-confirm" role="dialog" aria-modal="true" aria-label="Confirmação" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] hidden flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
         <div id="modal-content" class="bg-white dark:bg-gray-800 rounded-3xl p-8 w-full max-w-sm shadow-2xl transform scale-95 transition-transform duration-300 border border-gray-100 dark:border-gray-700">
             <div class="w-16 h-16 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center text-red-500 mb-6 mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -2064,7 +2151,8 @@
     }
 
     function salvarOPs() {
-        try { localStorage.setItem('gestaoOpDatabase', JSON.stringify(appData)); } catch(e){}
+        try { localStorage.setItem('gestaoOpDatabase', JSON.stringify(appData)); }
+        catch(e){ mostrarToast('Erro ao salvar localmente. Verifique espaço.', true); }
         salvarNoFirestore();
     }
 
@@ -2206,7 +2294,8 @@
     }
 
     function _salvarRegistrosAtv() {
-        try { localStorage.setItem('gestaoOpDatabase', JSON.stringify(appData)); } catch(e){}
+        try { localStorage.setItem('gestaoOpDatabase', JSON.stringify(appData)); }
+        catch(e){ mostrarToast('Erro ao salvar localmente. Verifique espaço.', true); }
         salvarNoFirestore();
     }
 
@@ -2642,6 +2731,8 @@
             toast = document.createElement('div');
             toast.id = 'toast';
             toast.className = 'fixed bottom-24 left-1/2 toast-leave z-[200] bg-gray-900 dark:bg-gray-700 border border-gray-800 text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-2 transition-all duration-300';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
             toast.innerHTML = '<svg id="toast-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" class="text-green-400 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span id="toast-msg"></span>';
             document.body.appendChild(toast);
         }
@@ -2678,6 +2769,9 @@
         setTimeout(function(){ ind.classList.remove('visible'); }, 1500);
     }
 
+    var _syncRetryCount = 0;
+    var _syncMaxRetries = 3;
+
     /** Salva dados do dia + config no Firestore com debounce de 2s */
     function salvarNoFirestore() {
         if (!db) return;
@@ -2685,10 +2779,23 @@
         _firestoreTimer = setTimeout(function () {
             var dayData = appData[workingDate];
             if (dayData) {
+                var payload = JSON.parse(JSON.stringify(dayData));
+                if (currentSector && payload[currentSector]) {
+                    payload[currentSector]._lastModifiedAt = Date.now();
+                    payload[currentSector]._lastModifiedBy = operadorNome || '';
+                }
                 db.collection('operacoes').doc(dateToDocId(workingDate))
-                  .set(JSON.parse(JSON.stringify(dayData)), { merge: true })
-                  .then(function(){ mostrarIndicadorNuvem(); })
-                  .catch(function(e){ console.warn('[Firebase] salvar dia:', e.message); });
+                  .set(payload, { merge: true })
+                  .then(function(){ mostrarIndicadorNuvem(); _syncRetryCount = 0; })
+                  .catch(function(e){
+                      console.warn('[Firebase] salvar dia:', e.message);
+                      _syncRetryCount++;
+                      if (_syncRetryCount <= _syncMaxRetries) {
+                          setTimeout(function(){ salvarNoFirestore(); }, 5000 * _syncRetryCount);
+                      } else {
+                          mostrarToast('Erro ao sincronizar. Dados salvos localmente.', true);
+                      }
+                  });
             }
             if (appData.config) {
                 db.collection('operacoes').doc('config')
@@ -2728,6 +2835,9 @@
             if (callback) callback(mudou);
         }).catch(function(e){
             console.warn('[Firebase] carregar:', e.message);
+            if (navigator.onLine) {
+                mostrarToast('Falha ao carregar da nuvem. Usando dados locais.', true);
+            }
             if (callback) callback(false);
         });
     }
@@ -3011,12 +3121,12 @@
         e.preventDefault(); deferredPromptPWA = e;
         var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
-            ['btn-install','btn-install-sidebar'].forEach(function(id){ var b=document.getElementById(id); if(b){b.classList.remove('hidden');b.classList.add('flex');} });
+            ['btn-install','btn-install-sidebar','btn-install-desktop'].forEach(function(id){ var b=document.getElementById(id); if(b){b.classList.remove('hidden');b.classList.add('flex');} });
         }
     });
     window.addEventListener('appinstalled', function(){
         deferredPromptPWA = null;
-        ['btn-install','btn-install-sidebar'].forEach(function(id){ var b=document.getElementById(id); if(b){b.classList.add('hidden');b.classList.remove('flex');} });
+        ['btn-install','btn-install-sidebar','btn-install-desktop'].forEach(function(id){ var b=document.getElementById(id); if(b){b.classList.add('hidden');b.classList.remove('flex');} });
         mostrarToast('App Prumo instalado!');
     });
     function installPWA() {
@@ -3084,6 +3194,14 @@
                 }
             });
         });
+
+        function atualizarStatusOnline() {
+            var el = document.getElementById('offline-indicator');
+            if (el) el.classList.toggle('visible', !navigator.onLine);
+        }
+        window.addEventListener('online', function() { atualizarStatusOnline(); salvarNoFirestore(); });
+        window.addEventListener('offline', atualizarStatusOnline);
+        atualizarStatusOnline();
     };
 
     function limparDadosAntigos() {
@@ -3134,6 +3252,13 @@
         }
     }
 
+    function atualizarDesktopSidebar() {
+        var dn = document.getElementById('desktop-user-name');
+        var ds = document.getElementById('desktop-user-sector');
+        if (dn) dn.textContent = operadorNome || '';
+        if (ds) ds.textContent = currentSector ? limparEmoji(currentSector) : (isAdmin ? 'Administrador' : '');
+    }
+
     function exibirBoasVindas() {
         var els = {
             nameDisplay: document.getElementById('user-name-display'),
@@ -3142,6 +3267,7 @@
         };
         if (els.nameDisplay) { els.nameDisplay.textContent = operadorNome; els.nameDisplay.classList.remove('hidden'); }
         if (els.welcomeMsg)  els.welcomeMsg.classList.remove('hidden');
+        atualizarDesktopSidebar();
         if (isAdmin) {
             if (els.adm) { els.adm.classList.remove('hidden'); els.adm.classList.add('flex'); }
             if (els.dp && currentViewId === 'view-menu') { els.dp.classList.remove('hidden'); els.dp.classList.add('flex'); }
@@ -3656,6 +3782,7 @@
         if (viewId === 'view-op') { renderFormularioOP(); renderListaOPs(); }
         if (viewId === 'view-atividades') { renderListaRegistrosAtv(); }
         if (viewId === 'view-productivity') { renderHistoricoProducao(); }
+        atualizarDesktopSidebar();
     }
 
     function navigate(viewId, sectorName, replace) {
@@ -4441,7 +4568,7 @@
             if(dayData){
                 var dayLinhas='';
                 SETORES_ORDEM.forEach(function(setor){ var st=dayData[setor]; if(st) dayLinhas+=_renderSetorLinhas(setor,st); });
-                if(dayLinhas){ hasData=true; linhas+='<tr style="background:#1e40af;color:white;"><td colspan="4" style="text-align:center;font-size:13px;font-weight:bold;padding:10px;letter-spacing:0.05em;">📅 '+dataKey+'</td></tr>'+dayLinhas; }
+                if(dayLinhas){ hasData=true; linhas+='<tr style="background:#1e40af;color:white;"><td colspan="4" style="text-align:center;font-size:13px;font-weight:bold;padding:10px;letter-spacing:0.05em;">📅 '+escapeHTML(dataKey)+'</td></tr>'+dayLinhas; }
             }
             cur.setDate(cur.getDate()+1);
         }
