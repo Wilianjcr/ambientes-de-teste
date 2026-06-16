@@ -1,9 +1,16 @@
-// Prumo — Service Worker v1.2
-const CACHE_NAME = 'prumo-v2.1';
+// Prumo — Service Worker v2.0
+const CACHE_NAME = 'prumo-v2.2';
 const ASSETS = [
     './',
     './index.html',
     './icon.svg'
+];
+
+const CDN_HOSTS = [
+    'cdn.tailwindcss.com',
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
+    'www.gstatic.com'
 ];
 
 // Install — cache essential assets
@@ -30,12 +37,36 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
-// Fetch — network first, fallback to cache
+function isCDN(url) {
+    try {
+        const host = new URL(url).hostname;
+        return CDN_HOSTS.some(h => host === h || host.endsWith('.' + h));
+    } catch(e) { return false; }
+}
+
+// Fetch handler
 self.addEventListener('fetch', event => {
-    // Skip non-GET and cross-origin requests
     if (event.request.method !== 'GET') return;
-    
-    // For navigation requests (HTML), try network first
+
+    // CDN assets: stale-while-revalidate (serve from cache instantly, update in background)
+    if (isCDN(event.request.url)) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then(cache =>
+                cache.match(event.request).then(cached => {
+                    const fetched = fetch(event.request).then(response => {
+                        if (response && response.status === 200) {
+                            cache.put(event.request, response.clone());
+                        }
+                        return response;
+                    }).catch(() => cached);
+                    return cached || fetched;
+                })
+            )
+        );
+        return;
+    }
+
+    // Navigation requests: network first, fallback to cache
     if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request)
@@ -49,7 +80,7 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // For other requests, try network first then cache
+    // Other same-origin requests: network first then cache
     event.respondWith(
         fetch(event.request)
             .then(response => {

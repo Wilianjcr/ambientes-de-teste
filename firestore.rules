@@ -1,0 +1,32 @@
+rules_version = '2';
+
+// Prumo — Firestore Security Rules
+// Deploy: Firebase Console > Firestore > Rules > Paste & Publish
+//
+// Pre-requisite: Enable Anonymous Authentication in
+// Firebase Console > Authentication > Sign-in method > Anonymous
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Config document: anyone authenticated can read, only admins write
+    match /operacoes/config {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+      // TODO: restrict write to admin UIDs after setting up admin list:
+      // allow write: if request.auth.uid in ['ADMIN_UID_1', 'ADMIN_UID_2'];
+    }
+
+    // Daily operation documents: authenticated users can read/write
+    match /operacoes/{dayDoc} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.resource.data.keys().size() <= 20;  // limit sectors per day
+    }
+
+    // Block everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
