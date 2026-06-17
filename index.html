@@ -1906,20 +1906,112 @@
             </div>
 
             <div id="view-os" class="view-hidden w-full flex flex-col min-h-full p-4 md:p-8">
-                <div class="w-full max-w-3xl mx-auto flex-1 flex flex-col">
-                    <div class="mb-8 border-b border-gray-200 dark:border-gray-700 pb-4 flex items-center justify-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-500">🔧</div>
-                        <h2 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-widest heading-font">Abertura de O.S</h2>
+                <div class="w-full max-w-4xl mx-auto flex-1 flex flex-col">
+                    <div class="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4 flex flex-col items-center gap-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-500">🔧</div>
+                            <h2 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-widest heading-font">Abertura de O.S</h2>
+                        </div>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 tracking-wide">Capricornio Coffees — Gestão de Manutenção</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 shadow-soft border border-gray-200 dark:border-gray-700 rounded-3xl p-6 md:p-8 relative transition-colors flex-1 flex flex-col gap-6">
+                    <div class="bg-white dark:bg-gray-800 shadow-soft border border-gray-200 dark:border-gray-700 rounded-3xl p-5 md:p-8 relative transition-colors flex-1 flex flex-col gap-5">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Nº da O.S</label>
+                                <div id="os-numero" class="w-full bg-gray-100 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-xl text-base font-black text-orange-500 py-3.5 px-5 select-none tracking-wider">—</div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Data / Hora</label>
+                                <div id="os-data" class="w-full bg-gray-100 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-300 py-3.5 px-5 select-none">—</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Solicitante</label>
+                                <input type="text" id="os-solicitante" oninput="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-bold outline-none text-gray-900 dark:text-white py-3.5 px-5 focus:ring-2 focus:ring-orange-500 transition-all" placeholder="Nome do solicitante">
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Departamento / Setor</label>
+                                <select id="os-setor-solicitante" onchange="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-bold outline-none text-gray-900 dark:text-white py-3.5 px-5 focus:ring-2 focus:ring-orange-500 transition-all appearance-none cursor-pointer">
+                                    <option value="">Selecione o setor...</option>
+                                    <option value="Recebimento">Recebimento</option>
+                                    <option value="Rebenefício">Rebenefício</option>
+                                    <option value="Expedição">Expedição</option>
+                                    <option value="Embalagem">Embalagem</option>
+                                    <option value="Classificação">Classificação</option>
+                                    <option value="Armazém">Armazém</option>
+                                    <option value="Operações">Operações</option>
+                                    <option value="Manutenção">Manutenção</option>
+                                    <option value="Sala de Torra">Sala de Torra</option>
+                                    <option value="Sala de Prova">Sala de Prova</option>
+                                    <option value="Sala de Preparo">Sala de Preparo</option>
+                                    <option value="Sala de Vácuo">Sala de Vácuo</option>
+                                    <option value="Sala da Gerência">Sala da Gerência</option>
+                                    <option value="Sala de Reunião">Sala de Reunião</option>
+                                    <option value="Sala de Entrevista">Sala de Entrevista</option>
+                                    <option value="Sala dos Compressores">Sala dos Compressores</option>
+                                    <option value="Sala dos Caminhoneiros">Sala dos Caminhoneiros</option>
+                                    <option value="Cafeteria">Cafeteria</option>
+                                    <option value="Balança Externa">Balança Externa</option>
+                                    <option value="Portaria">Portaria</option>
+                                    <option value="Diretoria">Diretoria</option>
+                                    <option value="Administração">Administração</option>
+                                    <option value="Adm Operações">Adm Operações</option>
+                                    <option value="Adm RH">Adm RH</option>
+                                    <option value="Copa Interna">Copa Interna</option>
+                                    <option value="Copa Externa">Copa Externa</option>
+                                    <option value="Lavanderia (Interna)">Lavanderia (Interna)</option>
+                                    <option value="Recepção Funcionários">Recepção Funcionários</option>
+                                    <option value="Corredor">Corredor</option>
+                                    <option value="Capricornio (Prédio)">Capricornio (Prédio)</option>
+                                    <option value="Wc 01 Feminino">Wc 01 Feminino</option>
+                                    <option value="Wc 02 Masculino">Wc 02 Masculino</option>
+                                    <option value="Wc 03 Caminhoneiro">Wc 03 Caminhoneiro</option>
+                                    <option value="Wc 04 Masculino">Wc 04 Masculino</option>
+                                    <option value="Wc 05 Feminino">Wc 05 Feminino</option>
+                                    <option value="Wc 06 Masculino">Wc 06 Masculino</option>
+                                    <option value="Wc 07 Feminino">Wc 07 Feminino</option>
+                                    <option value="Wc 08 Visitantes">Wc 08 Visitantes</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="w-full">
                             <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Equipamento / Máquina</label>
-                            <input type="text" id="os-equipamento" oninput="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-base font-bold outline-none text-gray-900 dark:text-white py-4 px-5 focus:ring-2 focus:ring-orange-500 transition-all" placeholder="Ex: Elevador 01, Balança...">
+                            <input type="text" id="os-equipamento" oninput="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-base font-bold outline-none text-gray-900 dark:text-white py-3.5 px-5 focus:ring-2 focus:ring-orange-500 transition-all" placeholder="Ex: Elevador 01, Mesa Densimétrica 02, Balança...">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Tipo de Manutenção</label>
+                                <select id="os-tipo-manutencao" onchange="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-bold outline-none text-gray-900 dark:text-white py-3.5 px-5 focus:ring-2 focus:ring-orange-500 transition-all appearance-none cursor-pointer">
+                                    <option value="">Selecione...</option>
+                                    <option value="Corretiva">Corretiva</option>
+                                    <option value="Preventiva">Preventiva</option>
+                                    <option value="Preditiva">Preditiva</option>
+                                    <option value="Emergencial">Emergencial</option>
+                                    <option value="Instalação/Melhoria">Instalação/Melhoria</option>
+                                    <option value="Manutenção de Processos">Manutenção de Processos</option>
+                                    <option value="Predial (Telhado, etc.)">Predial (Telhado, etc.)</option>
+                                </select>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Criticidade / Urgência</label>
+                                <select id="os-criticidade" onchange="debouncedSave()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-bold outline-none text-gray-900 dark:text-white py-3.5 px-5 focus:ring-2 focus:ring-orange-500 transition-all appearance-none cursor-pointer">
+                                    <option value="">Selecione...</option>
+                                    <option value="Baixa">🟢 Baixa</option>
+                                    <option value="Média">🟡 Média</option>
+                                    <option value="Alta">🟠 Alta</option>
+                                    <option value="Emergencial">🔴 Emergencial</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="w-full flex-1 flex flex-col">
-                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Descrição do Problema</label>
-                            <textarea id="os-problema" oninput="debouncedSave()" class="w-full flex-1 min-h-[200px] bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-medium outline-none text-gray-900 dark:text-white py-4 px-5 focus:ring-2 focus:ring-orange-500 transition-all resize-none" placeholder="Descreva detalhadamente a falha, ruídos anormais, ou motivo da solicitação..."></textarea>
+                            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 ml-1">Descrição Detalhada da Ocorrência</label>
+                            <textarea id="os-problema" oninput="debouncedSave()" class="w-full flex-1 min-h-[180px] bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-medium outline-none text-gray-900 dark:text-white py-4 px-5 focus:ring-2 focus:ring-orange-500 transition-all resize-none" placeholder="Descreva detalhadamente a falha, ruídos anormais, vazamentos, danos visuais ou motivo da solicitação..."></textarea>
                         </div>
+                        <a href="https://ecomtrading-my.sharepoint.com/:x:/g/personal/wilian_junior_capricorniocoffees_com_br/IQBSiCKuQMPoQ5JFBNLqc1mpAWL6_RJPvVpAavrEkDjpIus?e=zPaRCh" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-xl font-bold active:scale-[0.98] transition-all shadow-md text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 no-underline">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Acessar Planilha Master (SharePoint)
+                        </a>
                     </div>
                 </div>
             </div>
@@ -4631,7 +4723,7 @@
     }
 
     function getEmptySectorState() {
-        return { timeBlocks:[{id:Date.now(),start:'',end:'',ref:'',bags:'',obs:'',activity:'',opRef:'',opCliente:''}], horInicial:'',horFinal:'', pesoAmostra:'',pesoRetido:'',tolAmostra:'',tolPerc:'', atvServico:'',atvSacas:'',atvAjuda:'Não',atvAjudaQtd:'',atvProjecao:'', justificativa:'',shiftName:'',shiftStart:'',shiftEnd:'', osEquipamento:'',osProblema:'', reqMatNome:'',reqMatQtd:'',reqMatJust:'', reqComprasItens:[] };
+        return { timeBlocks:[{id:Date.now(),start:'',end:'',ref:'',bags:'',obs:'',activity:'',opRef:'',opCliente:''}], horInicial:'',horFinal:'', pesoAmostra:'',pesoRetido:'',tolAmostra:'',tolPerc:'', atvServico:'',atvSacas:'',atvAjuda:'Não',atvAjudaQtd:'',atvProjecao:'', justificativa:'',shiftName:'',shiftStart:'',shiftEnd:'', osEquipamento:'',osProblema:'',osSolicitante:'',osSetorSolicitante:'',osTipoManutencao:'',osCriticidade:'', reqMatNome:'',reqMatQtd:'',reqMatJust:'', reqComprasItens:[] };
     }
 
     function loadDataParaTela() {
@@ -4674,7 +4766,18 @@
             document.getElementById('atv-projecao').value  = st.atvProjecao || '';
             toggleAjudaQtd(); checkPlanejamentoBagsVisibility();
         }
-        if (currentViewId === 'view-os') { document.getElementById('os-equipamento').value=st.osEquipamento||''; document.getElementById('os-problema').value=st.osProblema||''; }
+        if (currentViewId === 'view-os') {
+            document.getElementById('os-equipamento').value=st.osEquipamento||'';
+            document.getElementById('os-problema').value=st.osProblema||'';
+            document.getElementById('os-solicitante').value=st.osSolicitante||operadorNome||'';
+            document.getElementById('os-setor-solicitante').value=st.osSetorSolicitante||limparEmoji(currentSector)||'';
+            document.getElementById('os-tipo-manutencao').value=st.osTipoManutencao||'';
+            document.getElementById('os-criticidade').value=st.osCriticidade||'';
+            var osNumEl=document.getElementById('os-numero');
+            if(osNumEl) osNumEl.textContent=st.osNumeroGerado||Date.now().toString(36).toUpperCase().slice(-6);
+            var osDataEl=document.getElementById('os-data');
+            if(osDataEl){ var agora=new Date(); osDataEl.textContent=workingDate+' '+String(agora.getHours()).padStart(2,'0')+':'+String(agora.getMinutes()).padStart(2,'0'); }
+        }
         if (currentViewId === 'view-requisicao') {
             document.getElementById('req-mat-nome').value = st.reqMatNome||'';
             document.getElementById('req-mat-qtd').value  = st.reqMatQtd ||'';
@@ -4705,7 +4808,16 @@
             st.atvAjudaQtd = document.getElementById('atv-ajuda-qtd').value;
             st.atvProjecao = document.getElementById('atv-projecao').value;
         }
-        if (currentViewId === 'view-os')         { st.osEquipamento=document.getElementById('os-equipamento').value; st.osProblema=document.getElementById('os-problema').value; }
+        if (currentViewId === 'view-os') {
+            st.osEquipamento=document.getElementById('os-equipamento').value;
+            st.osProblema=document.getElementById('os-problema').value;
+            st.osSolicitante=document.getElementById('os-solicitante').value;
+            st.osSetorSolicitante=document.getElementById('os-setor-solicitante').value;
+            st.osTipoManutencao=document.getElementById('os-tipo-manutencao').value;
+            st.osCriticidade=document.getElementById('os-criticidade').value;
+            var osNumEl=document.getElementById('os-numero');
+            if(osNumEl&&osNumEl.textContent!=='—') st.osNumeroGerado=osNumEl.textContent;
+        }
         if (currentViewId === 'view-requisicao') { st.reqMatNome=document.getElementById('req-mat-nome').value; st.reqMatQtd=document.getElementById('req-mat-qtd').value; st.reqMatJust=document.getElementById('req-mat-just').value; }
         try { localStorage.setItem('gestaoOpDatabase', JSON.stringify(appData)); }
         catch(e){
@@ -5087,7 +5199,9 @@
         } else if (currentViewId==='view-divisao-quebra') {
             document.getElementById('quebra-peso-total').value=''; renderizarLinhasQuebra(['','']); saveDataQuebra();
         } else if (currentViewId==='view-os') {
-            document.getElementById('os-equipamento').value=''; document.getElementById('os-problema').value='';
+            ['os-equipamento','os-problema','os-solicitante','os-tipo-manutencao','os-criticidade'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+            var selSetor=document.getElementById('os-setor-solicitante'); if(selSetor) selSetor.value='';
+            var osNumEl=document.getElementById('os-numero'); if(osNumEl) osNumEl.textContent='—';
         } else if (currentViewId==='view-requisicao') {
             ['req-mat-nome','req-mat-qtd','req-mat-just','req-comp-nome','req-comp-qtd','req-comp-just'].forEach(function(id){ document.getElementById(id).value=''; });
             document.getElementById('req-comp-cat').value='EPIs';
@@ -5375,7 +5489,18 @@
             if(!currentSector.includes('Manutenção')&&!currentSector.includes('Operações')&&!currentSector.includes('Classificação')){ var cs=servicoText?servicoText.split(', '):[]; var reqB=!cs.length||cs.some(function(a){ return !isNoBagsActivity(a.startsWith('Outras:')?'Outras':a); }); if(reqB){ texto+='\n\n📦 *Volume Previsto:* '+sacasFormatado+' sc'; if(projecao&&projecao!=='--:--') texto+='\n⏰ *Conclusão Estimada:* '+projecao; texto+='\n🤝 *Apoio Extra:* '+(ajuda==='Sim'?'Sim ('+ajudaQtd+' pessoa'+(ajudaQtd>1?'s':'')+')'  :'Não Necessita'); } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao; } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao;
             executarCompartilhamento('Planejamento '+cleanSetor,texto,cleanSetor); return;
         }
-        if(currentViewId==='view-os'){ var equip=document.getElementById('os-equipamento').value.trim(), prob=document.getElementById('os-problema').value.trim(); if(!equip||!prob) return mostrarToast('Informe a máquina e a descrição da falha.', true); var texto='🔧 *SOLICITAÇÃO DE MANUTENÇÃO (O.S)*\n\n📅 *DATA:* '+workingDate+'\n👤 *COLABORADOR:* '+operadorNome+'\n🏢 *SETOR:* '+cleanSetor+'\n⚙️ *EQUIPAMENTO:* '+equip+'\n\n⚠️ *DESCRIÇÃO DA FALHA:*\n'+prob; executarCompartilhamento('OS - '+equip,texto,cleanSetor); return; }
+        if(currentViewId==='view-os'){
+            var equip=document.getElementById('os-equipamento').value.trim(),
+                prob=document.getElementById('os-problema').value.trim(),
+                solic=document.getElementById('os-solicitante').value.trim()||operadorNome,
+                setorOS=document.getElementById('os-setor-solicitante').value||cleanSetor,
+                tipoMan=document.getElementById('os-tipo-manutencao').value,
+                crit=document.getElementById('os-criticidade').value,
+                numOS=(document.getElementById('os-numero')||{}).textContent||'';
+            if(!equip||!tipoMan||!prob) return mostrarToast('Preencha Equipamento, Tipo de Manutenção e Descrição.', true);
+            var texto='🔧 *SOLICITAÇÃO DE MANUTENÇÃO (O.S)*\n\n📋 *Nº O.S:* '+numOS+'\n📅 *DATA:* '+workingDate+'\n👤 *SOLICITANTE:* '+solic+'\n🏢 *SETOR:* '+setorOS+'\n⚙️ *EQUIPAMENTO:* '+equip+'\n🔩 *TIPO MANUTENÇÃO:* '+tipoMan+(crit?'\n🚨 *CRITICIDADE:* '+crit:'')+'\n\n⚠️ *DESCRIÇÃO DA OCORRÊNCIA:*\n'+prob;
+            executarCompartilhamento('OS - '+equip,texto,cleanSetor); return;
+        }
         if(currentViewId==='view-requisicao'){
             var texto='';
             if(abaReqAtual==='material'){ var mat=document.getElementById('req-mat-nome').value.trim(), qtd=document.getElementById('req-mat-qtd').value.trim(), just=document.getElementById('req-mat-just').value.trim(); if(!mat||!qtd) return mostrarToast('Insira o nome do insumo e a quantidade.', true); texto='📦 *REQUISIÇÃO INTERNA DE ESTOQUE*\n\n📅 '+workingDate+'\n👤 '+operadorNome+'\n🏢 '+cleanSetor+'\n\n🔹 *Material:* '+mat+'\n🔢 *Quantidade:* '+qtd+(just?'\n📝 *Para:* '+just:''); }
