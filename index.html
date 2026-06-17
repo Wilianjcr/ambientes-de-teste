@@ -728,13 +728,13 @@
                 width: 260px;
                 min-width: 260px;
                 height: 100%;
-                border-right: 1px solid var(--border-color, #e5e7eb);
+                border-left: 1px solid var(--border-color, #e5e7eb);
                 background: var(--bg-card, #ffffff);
                 transition: width 0.3s ease, min-width 0.3s ease, opacity 0.2s ease;
             }
             #desktop-sidebar.collapsed {
                 width: 0; min-width: 0; overflow: hidden; opacity: 0;
-                border-right: none;
+                border-left: none;
             }
             #desktop-main-wrap {
                 flex: 1;
@@ -903,7 +903,7 @@
         </div>
     </div>
 
-    <div id="app-container" class="w-full h-full bg-gray-50 dark:bg-gray-900 shadow-2xl overflow-hidden relative flex flex-col lg:flex-row transition-all duration-300 max-w-[1920px] mx-auto">
+    <div id="app-container" class="w-full h-full bg-gray-50 dark:bg-gray-900 shadow-2xl overflow-hidden relative flex flex-col lg:flex-row-reverse transition-all duration-300 max-w-[1920px] mx-auto">
 
         <!-- DESKTOP SIDEBAR (visible only on lg+) -->
         <aside id="desktop-sidebar" class="hidden" style="display:none">
@@ -1158,6 +1158,7 @@
                                         <label class="setor-pill"><input type="checkbox" value="📥 Recebimento" class="hidden"><span class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 cursor-pointer select-none transition-all hover:border-blue-300">📥 Rec.</span></label>
                                         <label class="setor-pill"><input type="checkbox" value="⏱️ Manutenção" class="hidden"><span class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 cursor-pointer select-none transition-all hover:border-rose-300">⏱️ Man.</span></label>
                                         <label class="setor-pill"><input type="checkbox" value="📊 Operações" class="hidden"><span class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 cursor-pointer select-none transition-all hover:border-cyan-300">📊 Op.</span></label>
+                                        <label class="setor-pill"><input type="checkbox" value="☕ Classificação" class="hidden"><span class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 cursor-pointer select-none transition-all hover:border-amber-300">☕ Cla.</span></label>
                                         <button type="button" onclick="toggleTodosSetores()" class="px-3 py-1.5 rounded-full text-[11px] font-bold border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-400 cursor-pointer hover:border-purple-400 hover:text-purple-500 transition-all">Todos</button>
                                     </div>
                                 </div>
@@ -1182,6 +1183,7 @@
                                     <button onclick="filtrarTurnosAdm('🚛 Expedição')" id="filtro-exp" class="px-3 py-1.5 rounded-full text-[11px] font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 transition-all">Exp.</button>
                                     <button onclick="filtrarTurnosAdm('📦 Embalagem')" id="filtro-emb" class="px-3 py-1.5 rounded-full text-[11px] font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 transition-all">Emb.</button>
                                     <button onclick="filtrarTurnosAdm('📥 Recebimento')" id="filtro-rec" class="px-3 py-1.5 rounded-full text-[11px] font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 transition-all">Rec.</button>
+                                    <button onclick="filtrarTurnosAdm('☕ Classificação')" id="filtro-cla" class="px-3 py-1.5 rounded-full text-[11px] font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 transition-all">Cla.</button>
                                 </div>
                                 <div class="space-y-2 max-h-[350px] overflow-y-auto pr-1 custom-scrollbar" id="adm-lista-turnos"></div>
                             </div>
@@ -2083,6 +2085,7 @@
                         <option value="📦 Embalagem">📦 Embalagem</option>
                         <option value="📊 Operações">📊 Operações</option>
                         <option value="⏱️ Manutenção">⏱️ Manutenção</option>
+                        <option value="☕ Classificação">☕ Classificação</option>
                     </select>
                 </div>
                 <button onclick="realizarLogin()" class="w-full bg-gray-900 dark:bg-white hover:bg-black dark:hover:bg-gray-100 text-white dark:text-gray-900 font-bold py-4 rounded-xl active:scale-[0.98] shadow-md transition-all mt-6 text-sm uppercase tracking-widest heading-font">Entrar</button>
@@ -2640,7 +2643,7 @@
         var ateEl = document.getElementById('filtro-periodo-ate');
         var deVal = deEl ? deEl.value : '';
         var ateVal = ateEl ? ateEl.value : '';
-        var setoresOP = ['⚙️ Rebenefício','🚛 Expedição','📦 Embalagem','📥 Recebimento','⏱️ Manutenção','📊 Operações'];
+        var setoresOP = ['⚙️ Rebenefício','🚛 Expedição','📦 Embalagem','📥 Recebimento','⏱️ Manutenção','📊 Operações','☕ Classificação'];
         var todos = [];
         Object.keys(appData).forEach(function(dataKey) {
             if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataKey)) return;
@@ -3445,7 +3448,8 @@
         { emoji: '🚛', nome: '🚛 Expedição', label: 'Expedição' },
         { emoji: '📦', nome: '📦 Embalagem', label: 'Embalagem' },
         { emoji: '📊', nome: '📊 Operações', label: 'Operações' },
-        { emoji: '⏱️', nome: '⏱️ Manutenção', label: 'Manutenção' }
+        { emoji: '⏱️', nome: '⏱️ Manutenção', label: 'Manutenção' },
+        { emoji: '☕', nome: '☕ Classificação', label: 'Classificação' }
     ];
 
     function _getSetoresOrder() {
@@ -3479,7 +3483,8 @@
             'Expedição':   { bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-600 dark:text-orange-400', ring: 'focus:ring-orange-500' },
             'Embalagem':   { bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400', ring: 'focus:ring-purple-500' },
             'Operações':   { bg: 'bg-cyan-50 dark:bg-cyan-900/20', text: 'text-cyan-600 dark:text-cyan-400', ring: 'focus:ring-cyan-500' },
-            'Manutenção':  { bg: 'bg-rose-50 dark:bg-rose-900/20', text: 'text-rose-600 dark:text-rose-400', ring: 'focus:ring-rose-500' }
+            'Manutenção':  { bg: 'bg-rose-50 dark:bg-rose-900/20', text: 'text-rose-600 dark:text-rose-400', ring: 'focus:ring-rose-500' },
+            'Classificação': { bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400', ring: 'focus:ring-amber-500' }
         };
         grid.innerHTML = setores.map(function(s){
             var c = colors[s.label] || { bg:'bg-gray-50 dark:bg-gray-700', text:'text-gray-600', ring:'focus:ring-gray-500' };
@@ -3651,7 +3656,7 @@
     function filtrarTurnosAdm(setor) {
         _filtroSetorAtivo = setor;
         // Atualizar botões de filtro
-        ['todos','reb','exp','emb','rec'].forEach(function(id){
+        ['todos','reb','exp','emb','rec','cla'].forEach(function(id){
             var btn = document.getElementById('filtro-'+id);
             if (!btn) return;
             btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all ' +
@@ -3681,7 +3686,8 @@
             '📦 Embalagem':    'bg-fuchsia-50 dark:bg-fuchsia-900/20 border-fuchsia-200 dark:border-fuchsia-800',
             '📥 Recebimento':  'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800',
             '⏱️ Manutenção':   'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
-            '📊 Operações':    'bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700'
+            '📊 Operações':    'bg-gray-50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700',
+            '☕ Classificação': 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800'
         };
         container.innerHTML = filtrados.map(function(t){
             var idx = turnos.indexOf(t);
@@ -4115,7 +4121,7 @@
     function populateShiftSelector() { renderShiftCards(); }
     function onShiftChange(sel) { debouncedSave(); calcTotalProductivity(); }
 
-    var NO_BAGS_LIST = ['Conferência de Estoque','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras','Outros','Conferência de Estoque (M.I)','Recebimento e Conferência de Sacas','Prevetiva no Recebimento','Prevetiva no Rebenefício','Prevetiva na Expedição','O.S do Sistema','Inventario no Almoxarifado','Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização'];
+    var NO_BAGS_LIST = ['Conferência de Estoque','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras','Outros','Conferência de Estoque (M.I)','Recebimento e Conferência de Sacas','Prevetiva no Recebimento','Prevetiva no Rebenefício','Prevetiva na Expedição','O.S do Sistema','Inventario no Almoxarifado','Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização','Guias','Estoque','Qualidade','Certificações','Reuniões','Cursos'];
     function isNoBagsActivity(activity) {
         if (!activity) return false;
         return NO_BAGS_LIST.some(function(item){ return activity.startsWith(item); });
@@ -4128,7 +4134,8 @@
         'Expedição':   ['Pilha simples (Liga)','Ensaque','Embarque (Exportação)','Produção de Vácuo','Coleta (Mercado interno)'],
         'Embalagem':   ['Aplicação de Stickers','Aplicação de VDP','Produção de Vácuo','Coleta (Mercado interno)'],
         'Manutenção':  ['Manutenção Preventiva','Manutenção Corretiva','Ajuste de Máquinas','Outros'],
-        'Operações':   ['Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização','Outros']
+        'Operações':   ['Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização','Outros'],
+        'Classificação': ['Amostra Fornecedor','Amostra Interna','Amostra Cliente','Torra','Cupping','Guias','Estoque','Qualidade','Certificações','Latas','Reuniões','Cursos']
     };
     var PLANEJAMENTO_MAP = {
         'Recebimento': ['Recebimento de café','Pilha simples (Liga)','Ensaque','Embarque (Mercado interno)','Conferência de Estoque','Guardar Café (Rebenefício)','Separar Lotes (Expedição)','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras'],
@@ -4137,7 +4144,8 @@
         'Expedição':   ['Pilha simples (Liga)','Ensaque','Embarque (Exportação)','Produção de Vácuo','Coleta (Mercado interno)','Fracionamento de Lote','Conferência de Estoque (M.I)','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras'],
         'Embalagem':   ['Aplicação de Stickers','Aplicação de VDP','Produção de Vácuo','Coleta (Mercado interno)','Conferência de Estoque','Recebimento e Conferência de Sacas','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras'],
         'Manutenção':  ['Manutenção Preventiva','Manutenção Corretiva','Ajuste de Máquinas','Prevetiva no Recebimento','Prevetiva no Rebenefício','Prevetiva na Expedição','O.S do Sistema','Inventario no Almoxarifado','Limpeza do Setor','Outras'],
-        'Operações':   ['Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização','Outras']
+        'Operações':   ['Mapeamento de Processos','Auditoria','Treinamento','Análise de Falhas','5S / Organização','Outras'],
+        'Classificação': ['Amostra Fornecedor','Amostra Interna','Amostra Cliente','Torra','Cupping','Guias','Estoque','Qualidade','Certificações','Latas','Reuniões','Cursos','Limpeza do Setor','Realocação de setor','Disponível para Realocação','Outras']
     };
     // OP_ACTIVITIES_MAP: mesmas atividades do ACTIVITIES_MAP disponíveis nas OPs por setor
     // (já usa ACTIVITIES_MAP diretamente — mapeamento de correspondência para cruzamento)
@@ -4172,6 +4180,7 @@
         if (cleanSetor.includes('Recebimento'))                                      currentRefLabel = 'Guia/Lote';
         else if (cleanSetor.includes('Rebenefício') || cleanSetor.includes('TESTE')) currentRefLabel = 'Guia';
         else if (cleanSetor.includes('Expedição') || cleanSetor.includes('Embalagem')) currentRefLabel = 'Guia/Contrato';
+        else if (cleanSetor.includes('Classificação')) currentRefLabel = 'Amostra/Lote';
         else currentRefLabel = 'Referência';
         currentActivities             = ACTIVITIES_MAP[cleanSetor]   || [];
         currentPlanejamentoActivities = PLANEJAMENTO_MAP[cleanSetor] || [];
@@ -4179,7 +4188,7 @@
 
     function configurarBotoesSubmenu(cleanSetor) {
         var hide = function(id, cond){ var el=document.getElementById(id); if(!el) return; el.classList.toggle('hidden',cond); if(!cond) el.classList.add('flex'); };
-        hide('btn-menu-produtividade', cleanSetor==='Manutenção'||cleanSetor==='Operações');
+        hide('btn-menu-produtividade', cleanSetor==='Manutenção'||cleanSetor==='Operações'||cleanSetor==='Classificação');
         hide('btn-menu-quebra',   cleanSetor!=='Recebimento');
         hide('btn-menu-retencao', cleanSetor!=='Rebenefício'&&cleanSetor!=='TESTE');
         hide('btn-menu-horimetro',cleanSetor!=='Manutenção');
@@ -4416,7 +4425,7 @@
         var aCont = document.getElementById('container-atv-ajuda');
         var pCont = document.getElementById('container-atv-projecao');
         if (!sCont||!aCont||!pCont) return;
-        if (currentSector.includes('Manutenção')||currentSector.includes('Operações')) {
+        if (currentSector.includes('Manutenção')||currentSector.includes('Operações')||currentSector.includes('Classificação')) {
             [sCont,aCont,pCont].forEach(function(el){ el.classList.add('hidden'); });
             document.getElementById('atv-ajuda').value='Não'; document.getElementById('atv-projecao').value=''; toggleAjudaQtd(); return;
         }
@@ -4944,7 +4953,7 @@
         setTimeout(function(){ modal.classList.add('hidden'); },300);
     }
 
-    var SETORES_ORDEM=['⚙️ Rebenefício','🚛 Expedição','📦 Embalagem','📥 Recebimento','⏱️ Manutenção','📊 Operações','🧪 TESTE'];
+    var SETORES_ORDEM=['⚙️ Rebenefício','🚛 Expedição','📦 Embalagem','📥 Recebimento','⏱️ Manutenção','📊 Operações','☕ Classificação','🧪 TESTE'];
 
     function isMetaOk(st, sectorName) {
         if(!sectorName.includes('Rebenefício')&&!sectorName.includes('TESTE')) return true;
@@ -5180,7 +5189,7 @@
             if(!servicoText) return mostrarToast('Selecione os serviços que fará no dia!', true);
             var sacasFormatado=String(parseInt(String(sacas).replace(/\D/g,''))||0).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
             var texto='📋 *INFORME DE PLANEJAMENTO*\n\n📅 '+workingDate+' 👤 '+operadorNome+'\n🏢 Setor: '+cleanSetor+'\n\n*Serviços do Dia:*\n\n'+servicoText;
-            if(!currentSector.includes('Manutenção')&&!currentSector.includes('Operações')){ var cs=servicoText?servicoText.split(', '):[]; var reqB=!cs.length||cs.some(function(a){ return !isNoBagsActivity(a.startsWith('Outras:')?'Outras':a); }); if(reqB){ texto+='\n\n📦 *Volume Previsto:* '+sacasFormatado+' sc'; if(projecao&&projecao!=='--:--') texto+='\n⏰ *Conclusão Estimada:* '+projecao; texto+='\n🤝 *Apoio Extra:* '+(ajuda==='Sim'?'Sim ('+ajudaQtd+' pessoa'+(ajudaQtd>1?'s':'')+')'  :'Não Necessita'); } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao; } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao;
+            if(!currentSector.includes('Manutenção')&&!currentSector.includes('Operações')&&!currentSector.includes('Classificação')){ var cs=servicoText?servicoText.split(', '):[]; var reqB=!cs.length||cs.some(function(a){ return !isNoBagsActivity(a.startsWith('Outras:')?'Outras':a); }); if(reqB){ texto+='\n\n📦 *Volume Previsto:* '+sacasFormatado+' sc'; if(projecao&&projecao!=='--:--') texto+='\n⏰ *Conclusão Estimada:* '+projecao; texto+='\n🤝 *Apoio Extra:* '+(ajuda==='Sim'?'Sim ('+ajudaQtd+' pessoa'+(ajudaQtd>1?'s':'')+')'  :'Não Necessita'); } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao; } else if(projecao&&projecao!=='--:--') texto+='\n\n⏰ *Conclusão Estimada:* '+projecao;
             executarCompartilhamento('Planejamento '+cleanSetor,texto,cleanSetor); return;
         }
         if(currentViewId==='view-os'){ var equip=document.getElementById('os-equipamento').value.trim(), prob=document.getElementById('os-problema').value.trim(); if(!equip||!prob) return mostrarToast('Informe a máquina e a descrição da falha.', true); var texto='🔧 *SOLICITAÇÃO DE MANUTENÇÃO (O.S)*\n\n📅 *DATA:* '+workingDate+'\n👤 *COLABORADOR:* '+operadorNome+'\n🏢 *SETOR:* '+cleanSetor+'\n⚙️ *EQUIPAMENTO:* '+equip+'\n\n⚠️ *DESCRIÇÃO DA FALHA:*\n'+prob; executarCompartilhamento('OS - '+equip,texto,cleanSetor); return; }
