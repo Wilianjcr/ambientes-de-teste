@@ -19,7 +19,7 @@ assert {'home','streamings','favorites','all','add','manage','backup','import','
 assert {'drawer','modalShade','cards','siteView','siteFrame','importFile','updateDot'}.issubset(c.ids)
 assert 'HubNXNative' in h
 assert 'switch-media-hub.bookmarks.v1' in h
-assert root.joinpath('android/app/src/main/assets/index.html').read_text(encoding='utf-8') == h
+assert root.joinpath('android/app/src/main/assets/index.html').read_text(encoding='utf-8') == h.replace('name="hubnx-platform" content="web"','name="hubnx-platform" content="android"')
 k=root.joinpath('android/app/src/main/java/br/com/hubnx/MainActivity.kt').read_text(encoding='utf-8')
 assert k.count('addJavascriptInterface(')==1
 assert 'home.addJavascriptInterface' in k

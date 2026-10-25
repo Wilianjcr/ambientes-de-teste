@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
@@ -28,6 +29,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import org.json.JSONObject
 import java.io.File
+import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
@@ -79,6 +81,26 @@ class MainActivity : Activity() {
         }
         browser = createWebView()
         browser.visibility = View.GONE
+        browser.setOnTouchListener(object : View.OnTouchListener {
+            private var edgeSwipe = false
+            private var fromX = 0f
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                when (event.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        edgeSwipe = event.x < dp(25)
+                        fromX = event.x
+                        return edgeSwipe
+                    }
+                    MotionEvent.ACTION_UP -> if (edgeSwipe) {
+                        if (event.x - fromX > dp(80)) openDrawer()
+                        edgeSwipe = false
+                        return true
+                    }
+                    MotionEvent.ACTION_CANCEL -> edgeSwipe = false
+                }
+                return edgeSwipe
+            }
+        })
         browser.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 return !allowedSiteUrl(request.url.toString())
@@ -260,7 +282,17 @@ class MainActivity : Activity() {
         } else if (requestCode == IMPORT_BACKUP) {
             worker.execute {
                 runCatching {
-                    val dataBytes = contentResolver.openInputStream(uri)?.use { inp -> inp.readNBytes(MAX_BACKUP_SIZE + 1) } ?: error("Arquivo indisponível")
+                    val dataBytes = contentResolver.openInputStream(uri)?.use { inp ->
+                        val buf=ByteArray(16384)
+                        val out=ByteArrayOutputStream()
+                        while(true) {
+                            val n=inp.read(buf)
+                            if(n<0)break
+                            require(out.size()+n<=MAX_BACKUP_SIZE) { "Backup muito grande" }
+                            out.write(buf,0,n)
+                        }
+                        out.toByteArray()
+                    } ?: error("Arquivo indisponível")
                     require(dataBytes.size <= MAX_BACKUP_SIZE) { "Backup muito grande" }
                     String(dataBytes, Charsets.UTF_8)
                 }.onSuccess { raw -> ui.post {

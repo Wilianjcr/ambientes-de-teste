@@ -20,7 +20,7 @@ Projeto de código-fonte. **Nenhum APK/NRO final foi compilado ou validado em ha
 - A versão do código-fonte v0.1.0 não será indicada como atualização instalável enquanto não existirem artefatos testados.
 
 ## Android (como compilar)
-Abrir a pasta `hubnx/android/` no Android Studio, com Java 17 e Android SDK Platform 35. Sincronizar Gradle (AGP 8.7.3, Kotlin 2.0.21), gerar wrapper Gradle pelo Android Studio/Gradle local se necessário e compilar. O arquivo `hubnx/index.html` precisa ser copiado também para `android/app/src/main/assets/index.html` nas alterações; neste commit os dois são idênticos. Testar no Android antes de assinar Release.
+Abrir a pasta `hubnx/android/` no Android Studio, com Java 17 e Android SDK Platform 35. Sincronizar Gradle (AGP 8.7.3, Kotlin 2.0.21), gerar wrapper Gradle pelo Android Studio/Gradle local se necessário e compilar. O arquivo `hubnx/index.html` precisa ser copiado também para `android/app/src/main/assets/index.html` nas alterações; neste commit diferem apenas pelo identificador de plataforma `hubnx-platform` (`web`/`android`). Testar no Android antes de assinar Release.
 
 ## Switch (como preparar)
 ```sh
