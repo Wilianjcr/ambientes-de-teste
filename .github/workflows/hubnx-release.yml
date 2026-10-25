@@ -1,0 +1,28 @@
+name: HubNX · Atualizar manifesto após Release
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  update-hubnx:
+    if: startsWith(github.event.release.tag_name, 'hubnx-v') && !github.event.release.prerelease && !github.event.release.draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Atualizar catálogo de versões a partir dos binários
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: python3 hubnx/scripts/update_release.py
+      - name: Registrar nova versão estável
+        run: |
+          if ! git diff --quiet -- hubnx/releases.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add hubnx/releases.json
+            git commit -m "chore(hubnx): publica manifesto de versão estável"
+            git push origin HEAD:main
+          fi

@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "generated_at": "2026-10-25",
+  "platforms": {
+    "web": {
+      "version": "0.1.0",
+      "published": true,
+      "url": "https://github.com/Wilianjcr/ambientes-de-teste/tree/main/hubnx",
+      "notes": "Interface do HubNX, menu lateral, favoritos e backup."
+    },
+    "android": {
+      "version": "0.1.0",
+      "published": false,
+      "url": null,
+      "sha256": null,
+      "notes": "Código-fonte disponível; APK final ainda não publicado."
+    },
+    "switch": {
+      "version": "0.1.0",
+      "published": false,
+      "url": null,
+      "sha256": null,
+      "notes": "Código-fonte disponível; NRO final ainda não publicado."
+    }
+  }
+}
